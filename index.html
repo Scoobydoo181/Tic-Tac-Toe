@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        .board {
+            background-color: brown;
+            width: 1000px;
+            height: 1000px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .cell {
+            background-color: darkslategrey;
+            color: red;
+            width: 300px;
+            height: 300px;
+            font-size: 300px;
+            line-height: 300px;
+            text-align: center;
+        }
+
+        button {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title"></h1>
+    <button onclick="location.reload()">Restart</button>
+    <div class="board">
+        <div class="cell" id="cell0" onclick="handleClick(0)"></div>
+        <div class="cell" id="cell1" onclick="handleClick(1)"></div>
+        <div class="cell" id="cell2" onclick="handleClick(2)"></div>
+        <div class="cell" id="cell3" onclick="handleClick(3)"></div>
+        <div class="cell" id="cell4" onclick="handleClick(4)"></div>
+        <div class="cell" id="cell5" onclick="handleClick(5)"></div>
+        <div class="cell" id="cell6" onclick="handleClick(6)"></div>
+        <div class="cell" id="cell7" onclick="handleClick(7)"></div>
+        <div class="cell" id="cell8" onclick="handleClick(8)"></div>
+    </div>
+
+    <script>
+        let gameOver = false
+        const game = {
+            nextChar: 'X',
+            switchChar: () => game.nextChar = game.nextChar === 'X' ? 'O' : 'X'
+        }
+
+        let cellsList = document.getElementsByClassName('cell')
+        let cells = [[cellsList[0], cellsList[1], cellsList[2]],[cellsList[3], cellsList[4], cellsList[5]],[cellsList[6], cellsList[7], cellsList[8]]]
+
+        function handleClick(num) {
+            if(cellsList[num].innerHTML != "" || gameOver) return;
+
+            cellsList[num].innerHTML = game.nextChar
+            const winningString = game.nextChar + game.nextChar + game.nextChar
+            const col = num % 3
+            const row = Math.floor(num / 3)
+            
+            //check row
+            let ans = ''
+            for(let i = 0; i < 3; i++) ans += cells[row][i].innerHTML
+            if(ans === winningString) return endGame()
+            
+            //check column
+            ans = ''
+            for(let i = 0; i < 3; i++) ans += cells[i][col].innerHTML
+            if(ans === winningString) return endGame()
+            
+            //check diagonal
+            ans = ''
+            for(let i = 0; i < 3; i++) ans += cells[i][i].innerHTML
+            if(ans === winningString) return endGame()
+
+            ans = ''
+            for(let i = 0; i < 3; i++) ans += cells[i][2-i].innerHTML
+            if(ans === winningString) return endGame()
+
+            game.switchChar()
+        }
+
+        function endGame() {
+            document.getElementById('title').innerHTML = game.nextChar + " Wins!"
+            gameOver = true
+        }
+    </script>
+</body>
+</html>
